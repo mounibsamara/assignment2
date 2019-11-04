@@ -1,0 +1,179 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SELECT lname FROM patient
+--------------
+
++--------+
+| lname  |
++--------+
+| Gellar |
+| Brown  |
+| Green  |
+| Gellar |
+| Gellar |
+| Bing   |
+| Samara |
++--------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT DISTINCT lname FROM patient
+--------------
+
++--------+
+| lname  |
++--------+
+| Gellar |
+| Brown  |
+| Green  |
+| Bing   |
+| Samara |
++--------+
+5 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM doctor ORDER BY lname
+--------------
+
++---------+---------+-----------+--------------+------------+-------+
+| Lnumber | fname   | lname     | specialty    | date       | hcode |
++---------+---------+-----------+--------------+------------+-------+
+| SE66    | Colleen | Aziz      | Surgeon      | 1989-08-24 | ABC   |
+| HT45    | Ross    | Clooney   | Surgeon      | 1987-06-20 | DDE   |
+| RD34    | Bernie  | Kavorikan | Urologist    | 1980-09-09 | BBC   |
+| LK21    | Mounib  | Samara    | Surgeon      | 2018-08-08 | ABC   |
+| GD56    | Joey    | Shabado   | Podiatrist   | 1960-06-24 | BBC   |
+| YT67    | Ben     | Spock     | Pediatrician | 1955-02-20 | DDE   |
+| JK78    | Mandy   | Webster   | Surgeon      | 1990-08-08 | BBC   |
++---------+---------+-----------+--------------+------------+-------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT hospital,ohipnumber FROM hospital WHERE beds>1500
+--------------
+
++----------+------------+
+| hospital | ohipnumber |
++----------+------------+
+| Victoria | ABC        |
++----------+------------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT lname,fname FROM doctor WHERE doctor.hcode=(SELECT ohipnumber FROM hospital WHERE hospital="St.Joseph")
+--------------
+
++-----------+--------+
+| lname     | fname  |
++-----------+--------+
+| Shabado   | Joey   |
+| Webster   | Mandy  |
+| Kavorikan | Bernie |
++-----------+--------+
+3 rows in set (0.01 sec)
+
+--------------
+SELECT fname,lname FROM patient WHERE lname LIKE "G%"
+--------------
+
++---------+--------+
+| fname   | lname  |
++---------+--------+
+| Bill    | Gellar |
+| Jon     | Green  |
+| Colleen | Gellar |
+| Sean    | Gellar |
++---------+--------+
+4 rows in set (0.00 sec)
+
+--------------
+SELECT patient.fname,patient.lname FROM patient WHERE ohip IN (SELECT treats.patientnumber FROM treats WHERE treats.doctornumber IN (SELECT doctor.Lnumber FROM doctor WHERE doctor.lname="Clooney"))
+--------------
+
++--------+--------+
+| fname  | lname  |
++--------+--------+
+| Suzi   | Brown  |
+| Jon    | Green  |
+| Sean   | Gellar |
+| Scotty | Bing   |
++--------+--------+
+4 rows in set (0.00 sec)
+
+--------------
+SELECT hospital,city,doctor.lname FROM hospital,doctor WHERE headoflicnum=Lnumber
+--------------
+
++-----------+----------+---------+
+| hospital  | city     | lname   |
++-----------+----------+---------+
+| Victoria  | London   | Aziz    |
+| St.Joseph | London   | Shabado |
+| Victoria  | Victoria | Spock   |
++-----------+----------+---------+
+3 rows in set (0.00 sec)
+
+--------------
+SELECT SUM(beds) as Total_number_of_beds FROM hospital
+--------------
+
++----------------------+
+| Total_number_of_beds |
++----------------------+
+|                 3800 |
++----------------------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT patient.fname, doctor.fname FROM patient, doctor, hospital, treats WHERE patient.ohip=treats.patientnumber AND treats.doctornumber = doctor.Lnumber AND doctor.Lnumber = hospital.headoflicnum
+--------------
+
++---------+---------+
+| fname   | fname   |
++---------+---------+
+| Bill    | Joey    |
+| Colleen | Joey    |
+| Scotty  | Joey    |
+| Jon     | Colleen |
++---------+---------+
+4 rows in set (0.00 sec)
+
+--------------
+SELECT lname,fname FROM doctor WHERE hcode IN (SELECT ohipnumber FROM hospital WHERE hospital="Victoria") AND Specialty="Surgeon"
+--------------
+
++---------+---------+
+| lname   | fname   |
++---------+---------+
+| Clooney | Ross    |
+| Samara  | Mounib  |
+| Aziz    | Colleen |
++---------+---------+
+3 rows in set (0.00 sec)
+
+--------------
+SELECT doctor.fname FROM doctor WHERE Lnumber NOT IN (SELECT doctornumber FROM treats)
+--------------
+
++--------+
+| fname  |
++--------+
+| Bernie |
+| Ben    |
++--------+
+2 rows in set (0.00 sec)
+
+--------------
+SELECT doctor.fname,doctor.lname FROM doctor WHERE Lnumber IN (SELECT doctornumber FROM treats GROUP BY doctornumber HAVING COUNT(doctornumber)>1)
+--------------
+
++-------+---------+
+| fname | lname   |
++-------+---------+
+| Joey  | Shabado |
+| Ross  | Clooney |
+| Mandy | Webster |
++-------+---------+
+3 rows in set (0.00 sec)
+
+Bye

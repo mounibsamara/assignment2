@@ -1,0 +1,41 @@
+-- File 3
+USE msamara2assign2db;
+-- Query 1
+SELECT lname FROM patient;
+
+-- Query 2
+SELECT DISTINCT lname FROM patient;
+
+-- Query 3
+SELECT * FROM doctor ORDER BY lname;
+
+-- Query 4
+SELECT hospital,ohipnumber FROM hospital WHERE beds>1500;
+
+-- Query 5
+SELECT lname,fname FROM doctor WHERE doctor.hcode=(SELECT ohipnumber FROM hospital WHERE hospital="St.Joseph");
+
+-- Query 6
+SELECT fname,lname FROM patient WHERE lname LIKE "G%";
+
+-- Query 7
+SELECT patient.fname,patient.lname FROM patient WHERE ohip IN (SELECT treats.patientnumber FROM treats WHERE treats.doctornumber IN (SELECT doctor.Lnumber FROM doctor WHERE doctor.lname="Clooney"));
+
+-- Query 8
+SELECT hospital,city,doctor.lname FROM hospital,doctor WHERE headoflicnum=Lnumber;
+
+-- Query 9
+SELECT SUM(beds) as Total_number_of_beds FROM hospital;
+
+-- Query 10
+SELECT patient.fname, doctor.fname FROM patient, doctor, hospital, treats WHERE patient.ohip=treats.patientnumber AND treats.doctornumber = doctor.Lnumber AND doctor.Lnumber = hospital.headoflicnum;
+
+-- Query 11
+SELECT lname,fname FROM doctor WHERE hcode IN (SELECT ohipnumber FROM hospital WHERE hospital="Victoria") AND Specialty="Surgeon";
+
+-- Query 12
+SELECT doctor.fname FROM doctor WHERE Lnumber NOT IN (SELECT doctornumber FROM treats);
+
+-- Query 13
+SELECT doctor.fname,doctor.lname FROM doctor WHERE Lnumber IN (SELECT doctornumber FROM treats GROUP BY doctornumber HAVING COUNT(doctornumber)>1);
+

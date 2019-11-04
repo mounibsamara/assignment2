@@ -1,0 +1,22 @@
+-- file 1
+SHOW DATABASES;
+-- drop database msamara2assign2db if it exists
+DROP DATABASE IF EXISTS msamara2assign2db;
+CREATE DATABASE msamara2assign2db;
+USE msamara2assign2db;
+
+-- grant tas previliges to work within 
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON yourwesternuseridassign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+
+-- create the required tables
+SHOW TABLES;
+CREATE TABLE doctor (Lnumber CHAR(4) NOT NULL,fname VARCHAR(20),lname VARCHAR(20),specialty VARCHAR(30),date DATE,hcode CHAR(3),PRIMARY KEY (Lnumber));
+CREATE TABLE hospital (ohipnumber CHAR(3) NOT NULL,hospital VARCHAR(20),city VARCHAR(20),province VARCHAR(20),beds INT NOT NULL,headoflicnum CHAR(4),FOREIGN KEY (headoflicnum) REFERENCES doctor(lnumber),dateofhead DATE,PRIMARY KEY (ohipnumber));
+ALTER TABLE doctor ADD FOREIGN KEY (hcode) REFERENCES hospital(ohipnumber);
+CREATE TABLE patient (ohip CHAR(9) NOT NULL,fname VARCHAR(20),lname VARCHAR(20),PRIMARY KEY (ohip));
+CREATE TABLE treats (doctornumber CHAR(4) NOT NULL,patientnumber CHAR(9) NOT NULL,FOREIGN KEY (doctornumber) REFERENCES doctor(Lnumber) ON DELETE CASCADE,FOREIGN KEY (patientnumber) REFERENCES patient(ohip),PRIMARY KEY (doctornumber, patientnumber));
+SHOW TABLES;

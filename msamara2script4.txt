@@ -1,0 +1,25 @@
+-- file 4
+USE msamara2assign2db;
+-- attempt to delete doctors who got their license before 1965
+DELETE FROM doctor WHERE doctor.date < '1965-01-01';
+-- did not work because those doctors had foreign key constraints
+
+-- create a view which gives us patient name and last name who are treated by head doctors who became a head doctor after dec 31 1995
+CREATE VIEW patients AS SELECT patient.fname AS 'patient_first_name',patient.lname AS 'patient_last_name', doctor.lname AS 'doctor_last_name',hospital.hospital AS 'hospital' FROM patient, doctor, hospital, treats WHERE patient.ohip=treats.patientnumber AND treats.doctornumber = doctor.Lnumber AND doctor.Lnumber = hospital.headoflicnum AND hospital.dateofhead > '1995-12-31';
+
+-- showing myview to show that it worked
+SELECT * FROM patients;
+
+-- showing doctor and treats
+SELECT * FROM doctor;
+SELECT * FROM treats;
+
+-- delete doctors whos last name ends with clooney
+DELETE FROM doctor WHERE doctor.lname="Clooney";
+-- showing that it worked
+SELECT * FROM doctor;
+SELECT * FROM treats;
+
+-- attempting to delete doctors who are surgeons
+DELETE FROM doctor WHERE specialty="Surgeon";
+-- they where not deleted because some of the surgeons where head doctors so they had foreign key constraints

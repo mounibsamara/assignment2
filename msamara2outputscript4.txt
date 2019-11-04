@@ -1,0 +1,105 @@
+Warning: Using a password on the command line interface can be insecure.
+ERROR 1451 (23000) at line 4: Cannot delete or update a parent row: a foreign key constraint fails (`msamara2assign2db`.`hospital`, CONSTRAINT `hospital_ibfk_1` FOREIGN KEY (`headoflicnum`) REFERENCES `doctor` (`Lnumber`))
+--------------
+DELETE FROM doctor WHERE doctor.date < '1965-01-01'
+--------------
+
+--------------
+CREATE VIEW patients AS SELECT patient.fname AS 'patient_first_name',patient.lname AS 'patient_last_name', doctor.lname AS 'doctor_last_name',hospital.hospital AS 'hospital' FROM patient, doctor, hospital, treats WHERE patient.ohip=treats.patientnumber AND treats.doctornumber = doctor.Lnumber AND doctor.Lnumber = hospital.headoflicnum AND hospital.dateofhead > '1995-12-31'
+--------------
+
+Query OK, 0 rows affected (0.02 sec)
+
+--------------
+SELECT * FROM patients
+--------------
+
++--------------------+-------------------+------------------+-----------+
+| patient_first_name | patient_last_name | doctor_last_name | hospital  |
++--------------------+-------------------+------------------+-----------+
+| Bill               | Gellar            | Shabado          | St.Joseph |
+| Colleen            | Gellar            | Shabado          | St.Joseph |
+| Scotty             | Bing              | Shabado          | St.Joseph |
++--------------------+-------------------+------------------+-----------+
+3 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++---------+---------+-----------+--------------+------------+-------+
+| Lnumber | fname   | lname     | specialty    | date       | hcode |
++---------+---------+-----------+--------------+------------+-------+
+| GD56    | Joey    | Shabado   | Podiatrist   | 1960-06-24 | BBC   |
+| JK78    | Mandy   | Webster   | Surgeon      | 1990-08-08 | BBC   |
+| LK21    | Mounib  | Samara    | Surgeon      | 2018-08-08 | ABC   |
+| RD34    | Bernie  | Kavorikan | Urologist    | 1980-09-09 | BBC   |
+| SE66    | Colleen | Aziz      | Surgeon      | 1989-08-24 | ABC   |
+| YT67    | Ben     | Spock     | Pediatrician | 1955-02-20 | DDE   |
++---------+---------+-----------+--------------+------------+-------+
+6 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM treats
+--------------
+
++--------------+---------------+
+| doctornumber | patientnumber |
++--------------+---------------+
+| GD56         | 110112113     |
+| JK78         | 111222333     |
+| SE66         | 111222333     |
+| GD56         | 333444555     |
+| JK78         | 444555666     |
+| GD56         | 667766777     |
+| JK78         | 667766777     |
+| LK21         | 829182739     |
++--------------+---------------+
+8 rows in set (0.00 sec)
+
+--------------
+DELETE FROM doctor WHERE doctor.lname="Clooney"
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT * FROM doctor
+--------------
+
++---------+---------+-----------+--------------+------------+-------+
+| Lnumber | fname   | lname     | specialty    | date       | hcode |
++---------+---------+-----------+--------------+------------+-------+
+| GD56    | Joey    | Shabado   | Podiatrist   | 1960-06-24 | BBC   |
+| JK78    | Mandy   | Webster   | Surgeon      | 1990-08-08 | BBC   |
+| LK21    | Mounib  | Samara    | Surgeon      | 2018-08-08 | ABC   |
+| RD34    | Bernie  | Kavorikan | Urologist    | 1980-09-09 | BBC   |
+| SE66    | Colleen | Aziz      | Surgeon      | 1989-08-24 | ABC   |
+| YT67    | Ben     | Spock     | Pediatrician | 1955-02-20 | DDE   |
++---------+---------+-----------+--------------+------------+-------+
+6 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM treats
+--------------
+
++--------------+---------------+
+| doctornumber | patientnumber |
++--------------+---------------+
+| GD56         | 110112113     |
+| JK78         | 111222333     |
+| SE66         | 111222333     |
+| GD56         | 333444555     |
+| JK78         | 444555666     |
+| GD56         | 667766777     |
+| JK78         | 667766777     |
+| LK21         | 829182739     |
++--------------+---------------+
+8 rows in set (0.00 sec)
+
+ERROR 1451 (23000) at line 24: Cannot delete or update a parent row: a foreign key constraint fails (`msamara2assign2db`.`hospital`, CONSTRAINT `hospital_ibfk_1` FOREIGN KEY (`headoflicnum`) REFERENCES `doctor` (`Lnumber`))
+--------------
+DELETE FROM doctor WHERE specialty="Surgeon"
+--------------
+
+Bye
